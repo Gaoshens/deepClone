@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>深克隆</title>
+  </head>
+  <body>
+    <script>
+      let obj = { a: 1, b: 2, c: { d: 1 } }
+      //如果我们想通过浅克隆 克隆这个对象
+      let obj1 = obj
+      let obj2 = { ...obj }
+      obj.date = new Date()
+      obj.reg = /^\d+$/
+      let obj3 = JSON.parse(JSON.stringify(obj))
+      const deepClone = (obj) => {
+        //判断特殊情况
+        if (obj === null) return null
+        if (typeof obj !== 'object') return obj
+        if (obj instanceof RegExp) return new RegExp(obj)
+        if (obj instanceof Date) return new Date(obj)
+        //let newObj = new Object()
+        //不直接创建一个新对象,保证克隆的结果和之前保持相同的所属类
+        let newObj = new obj.constructor()
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            newObj[key] = deepClone(obj[key]) //使用递归进行深层赋值
+          }
+        }
+        return newObj
+      }
+      let obj4 = deepClone(obj)
+      let obj5 = Object.assign({}, obj)
+      console.log(obj5, obj)
+    </script>
+  </body>
+</html>
